@@ -1,7 +1,7 @@
 import QuizTrain
 import XCTest
 
-final class QuizTrainManager: NSObject {
+public final class QuizTrainManager: NSObject {
 
     let objectAPI: ObjectAPI
     let project: QuizTrainProject
@@ -18,7 +18,7 @@ final class QuizTrainManager: NSObject {
 
     // MARK: - Testing
 
-    enum Result: String {
+    public enum Result: String {
         case passed
         case blocked
         case untested
