@@ -96,6 +96,28 @@ public final class TestManager: NSObject {
     public func completeTesting(_ caseIds: Case.Id..., withResultIfUntested result: QuizTrainManager.Result = .passed, comment: String? = nil) {
         quizTrainManager.completeTesting(caseIds, withResultIfUntested: result, comment: comment)
     }
+    
+    @discardableResult public func runActivity<Result>(named name: String? = nil, testing caseId: Case.Id, block: (XCTActivity) throws -> Result) rethrows -> Result {
+        return try runActivity(named: name, testing: [caseId], block: block)
+    }
+
+    @discardableResult public func runActivity<Result>(named name: String? = nil, testing caseIds: [Case.Id], block: (XCTActivity) throws -> Result) rethrows -> Result {
+
+        let caseTitles = TestManager.sharedInstance.quizTrainManager.project.caseTitles(caseIds, withCaseId: true, withProjectName: false, withSuiteName: true, withSectionNames: true).joined(separator: " | ")
+
+        let named: String
+        if let name = name {
+            named = name + ": " + caseTitles
+        } else {
+            named = caseTitles
+        }
+
+        startTesting(caseIds)
+        let result = try XCTContext.runActivity(named: named, block: block)
+        completeTesting(caseIds)
+
+        return result
+    }
 }
 
 // MARK: - Global
