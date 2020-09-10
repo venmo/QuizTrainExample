@@ -56,7 +56,7 @@ public final class TestManager: NSObject {
 
     private static var _sharedInstance: TestManager!
 
-    static var sharedInstance: TestManager {
+    static public var sharedInstance: TestManager {
         return _sharedInstance
     }
     
