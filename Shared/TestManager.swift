@@ -12,20 +12,22 @@ final class TestManager: NSObject {
 
     let quizTrainManager: QuizTrainManager
 
-    override init() {
-
+    /*
+     username: "YOUR@TESTRAIL.EMAIL"
+     secret: "YOUR_TESTRAIL_PASSWORD_OR_API_KEY"
+     hostname: "YOURINSTANCE.testrail.net"
+     */
+    init(username: String, secret: String, hostname: String, projectId: Int, port: Int = 443, scheme: String = "https") {
         print("\n========== TestManager ==========\n")
         defer { print("\n====================================\n") }
 
         print("QuizTrainManager setup started.")
-        #error("Update these ObjectAPI arguments below for your TestRail instance. Then comment out this macro.")
-        let objectAPI = QuizTrain.ObjectAPI(username: "YOUR@TESTRAIL.EMAIL", secret: "YOUR_TESTRAIL_PASSWORD_OR_API_KEY", hostname: "YOURINSTANCE.testrail.net", port: 443, scheme: "https")
+        let objectAPI = QuizTrain.ObjectAPI(username: username, secret: secret, hostname: hostname, port: port, scheme: scheme)
         var quizTrainManager: QuizTrainManager!
         let group = DispatchGroup()
         group.enter()
         DispatchQueue.global().async {
-            #error("Replace the projectId below with one from your TestRail instance. Then comment out this macro.")
-            QuizTrainProject.populatedProject(forProjectId: 99999, objectAPI: objectAPI) { (outcome) in
+            QuizTrainProject.populatedProject(forProjectId: projectId, objectAPI: objectAPI) { (outcome) in
                 switch outcome {
                 case .failure(let error):
                     print("QuizTrainManager setup failed: \(error)")
@@ -57,7 +59,43 @@ final class TestManager: NSObject {
     static var sharedInstance: TestManager {
         return _sharedInstance
     }
+    
+    func logTest(_ caseIds: [Case.Id], withCaseId: Bool = true, withProjectName: Bool = false, withSuiteName: Bool = true, withSectionNames: Bool = true) {
+        let caseTitles = quizTrainManager.project.caseTitles(caseIds, withCaseId: withCaseId, withProjectName: withProjectName, withSuiteName: withSuiteName, withSectionNames: withSectionNames)
+        for caseTitle in caseTitles {
+            print(caseTitle)
+        }
+    }
 
+    func logTest(_ caseIds: Case.Id..., withCaseId: Bool = true, withProjectName: Bool = false, withSuiteName: Bool = true, withSectionNames: Bool = true) {
+        logTest(caseIds, withCaseId: withCaseId, withProjectName: withProjectName, withSuiteName: withSuiteName, withSectionNames: withSectionNames)
+    }
+
+    func logAndStartTesting(_ caseIds: [Case.Id]) {
+        logTest(caseIds)
+        startTesting(caseIds)
+    }
+
+    func logAndStartTesting(_ caseIds: Case.Id...) {
+        logTest(caseIds)
+        startTesting(caseIds)
+    }
+
+    func startTesting(_ caseIds: [Case.Id]) {
+        quizTrainManager.startTesting(caseIds)
+    }
+
+    func startTesting(_ caseIds: Case.Id...) {
+        quizTrainManager.startTesting(caseIds)
+    }
+
+    func completeTesting(_ caseIds: [Case.Id], withResultIfUntested result: QuizTrainManager.Result = .passed, comment: String? = nil) {
+        quizTrainManager.completeTesting(caseIds, withResultIfUntested: result, comment: comment)
+    }
+
+    func completeTesting(_ caseIds: Case.Id..., withResultIfUntested result: QuizTrainManager.Result = .passed, comment: String? = nil) {
+        quizTrainManager.completeTesting(caseIds, withResultIfUntested: result, comment: comment)
+    }
 }
 
 // MARK: - Global

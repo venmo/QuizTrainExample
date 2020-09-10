@@ -1,4 +1,5 @@
 import QuizTrain
+import Foundation
 
 struct QuizTrainProject {
 
@@ -169,7 +170,7 @@ struct QuizTrainProject {
 
             group.enter()
             var usersOutcome: QuizTrain.Outcome<[QuizTrain.User], QuizTrain.ObjectAPI.GetError>!
-            objectAPI.getUsers { (outcome) in
+            objectAPI.getUsers(projectId) { (outcome) in
                 usersOutcome = outcome
                 group.leave()
             }

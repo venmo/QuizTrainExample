@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "QuizTrain",
+        "repositoryURL": "https://github.com/denys-meloshyn/QuizTrain",
+        "state": {
+          "branch": "master",
+          "revision": "27872e3e3f3ea5f9dc982fbe501947a2be08f99e",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
