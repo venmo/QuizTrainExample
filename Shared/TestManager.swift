@@ -8,7 +8,7 @@ import XCTest
 
  Performs logic required before any tests run and after all tests complete.
  */
-final class TestManager: NSObject {
+public final class TestManager: NSObject {
 
     let quizTrainManager: QuizTrainManager
 
@@ -17,7 +17,7 @@ final class TestManager: NSObject {
      secret: "YOUR_TESTRAIL_PASSWORD_OR_API_KEY"
      hostname: "YOURINSTANCE.testrail.net"
      */
-    init(username: String, secret: String, hostname: String, projectId: Int, port: Int = 443, scheme: String = "https") {
+    public init(username: String, secret: String, hostname: String, projectId: Int, port: Int = 443, scheme: String = "https") {
         print("\n========== TestManager ==========\n")
         defer { print("\n====================================\n") }
 
@@ -60,40 +60,40 @@ final class TestManager: NSObject {
         return _sharedInstance
     }
     
-    func logTest(_ caseIds: [Case.Id], withCaseId: Bool = true, withProjectName: Bool = false, withSuiteName: Bool = true, withSectionNames: Bool = true) {
+    public func logTest(_ caseIds: [Case.Id], withCaseId: Bool = true, withProjectName: Bool = false, withSuiteName: Bool = true, withSectionNames: Bool = true) {
         let caseTitles = quizTrainManager.project.caseTitles(caseIds, withCaseId: withCaseId, withProjectName: withProjectName, withSuiteName: withSuiteName, withSectionNames: withSectionNames)
         for caseTitle in caseTitles {
             print(caseTitle)
         }
     }
 
-    func logTest(_ caseIds: Case.Id..., withCaseId: Bool = true, withProjectName: Bool = false, withSuiteName: Bool = true, withSectionNames: Bool = true) {
+    public func logTest(_ caseIds: Case.Id..., withCaseId: Bool = true, withProjectName: Bool = false, withSuiteName: Bool = true, withSectionNames: Bool = true) {
         logTest(caseIds, withCaseId: withCaseId, withProjectName: withProjectName, withSuiteName: withSuiteName, withSectionNames: withSectionNames)
     }
 
-    func logAndStartTesting(_ caseIds: [Case.Id]) {
+    public func logAndStartTesting(_ caseIds: [Case.Id]) {
         logTest(caseIds)
         startTesting(caseIds)
     }
 
-    func logAndStartTesting(_ caseIds: Case.Id...) {
+    public func logAndStartTesting(_ caseIds: Case.Id...) {
         logTest(caseIds)
         startTesting(caseIds)
     }
 
-    func startTesting(_ caseIds: [Case.Id]) {
+    public func startTesting(_ caseIds: [Case.Id]) {
         quizTrainManager.startTesting(caseIds)
     }
 
-    func startTesting(_ caseIds: Case.Id...) {
+    public func startTesting(_ caseIds: Case.Id...) {
         quizTrainManager.startTesting(caseIds)
     }
 
-    func completeTesting(_ caseIds: [Case.Id], withResultIfUntested result: QuizTrainManager.Result = .passed, comment: String? = nil) {
+    public func completeTesting(_ caseIds: [Case.Id], withResultIfUntested result: QuizTrainManager.Result = .passed, comment: String? = nil) {
         quizTrainManager.completeTesting(caseIds, withResultIfUntested: result, comment: comment)
     }
 
-    func completeTesting(_ caseIds: Case.Id..., withResultIfUntested result: QuizTrainManager.Result = .passed, comment: String? = nil) {
+    public func completeTesting(_ caseIds: Case.Id..., withResultIfUntested result: QuizTrainManager.Result = .passed, comment: String? = nil) {
         quizTrainManager.completeTesting(caseIds, withResultIfUntested: result, comment: comment)
     }
 }
